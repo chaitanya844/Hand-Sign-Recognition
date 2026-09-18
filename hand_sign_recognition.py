@@ -24,9 +24,20 @@ import math
 
 # ─── MediaPipe Hands Setup ──────────────────────────────────────────────────
 
-mp_hands = mp.solutions.hands
-mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles
+try:
+    import mediapipe.python.solutions.hands as mp_hands
+    import mediapipe.python.solutions.drawing_utils as mp_drawing
+    import mediapipe.python.solutions.drawing_styles as mp_drawing_styles
+except (ImportError, AttributeError):
+    try:
+        mp_hands = mp.solutions.hands
+        mp_drawing = mp.solutions.drawing_utils
+        mp_drawing_styles = mp.solutions.drawing_styles
+    except AttributeError:
+        from mediapipe.tasks.python import vision
+        raise ImportError(
+            "Incompatible MediaPipe version detected. Please run: pip install \"mediapipe<0.10.14\""
+        )
 
 
 # ─── Finger State Detection ────────────────────────────────────────────────
